@@ -1,51 +1,23 @@
-name: Build app
-
-on:
-  push:
-  workflow_dispatch:
-
-jobs:
-  windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm install
-      - run: npx electron-builder --win --publish never
-      - uses: actions/upload-artifact@v4
-        with:
-          name: windows-exe
-          path: dist/*.exe
-
-  mac:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm install
-      - run: npx electron-builder --mac --x64 --arm64 --publish never
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mac-zip
-          path: dist/*.zip
-
-  release:
-    needs: [windows, mac]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: out
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: Taikin Kero v1.0.${{ github.run_number }}
-          files: |
-            out/windows-exe/*
-            out/mac-zip/*
+{
+  "name": "taikin-kero",
+  "version": "1.0.0",
+  "description": "時計のそばに座って、退勤までの残り時間を教えてくれるカエル",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.example.taikinkero",
+    "productName": "TaikinKero",
+    "files": ["main.js", "index.html", "settings.html", "package.json"],
+    "win": { "target": "portable", "artifactName": "TaikinKero-win.${ext}" },
+    "mac": { "target": "zip", "category": "public.app-category.productivity", "artifactName": "TaikinKero-mac-${arch}.${ext}" },
+    "portable": { "artifactName": "TaikinKero-win.${ext}" }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
