@@ -32,3 +32,20 @@ jobs:
         with:
           name: mac-zip
           path: dist/*.zip
+
+  release:
+    needs: [windows, mac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Taikin Kero v1.0.${{ github.run_number }}
+          files: |
+            out/windows-exe/*
+            out/mac-zip/*
