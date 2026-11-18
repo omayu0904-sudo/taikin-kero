@@ -1,0 +1,22 @@
+{
+  "name": "taikin-kero",
+  "version": "1.0.0",
+  "description": "時計のそばに座って、退勤までの残り時間を教えてくれるカエル",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.example.taikinkero",
+    "productName": "TaikinKero",
+    "files": ["main.js", "index.html", "settings.html", "package.json"],
+    "win": { "target": "portable" },
+    "mac": { "target": "zip", "category": "public.app-category.productivity" }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
