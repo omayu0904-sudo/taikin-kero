@@ -77,6 +77,10 @@ function buildMenu() {
   const m = Menu.buildFromTemplate([
     { label: '設定…', click: openSettings },
     { type: 'separator' },
+    { label: 'カエルの大きさ', submenu: [
+      ['極小', 0.4], ['小', 0.6], ['やや小', 0.8], ['標準', 1], ['大', 1.4],
+    ].map(([label, v]) => ({ label, type: 'radio', checked: Math.abs(cfg.size - v) < 0.05,
+      click: () => { cfg.size = v; applyCfg(); } })) },
     { label: '音を出す', type: 'checkbox', checked: cfg.sound, click: () => toggle('sound') },
     { label: '勤務中のケロケロ', type: 'checkbox', checked: cfg.soundWork, click: () => toggle('soundWork') },
     { label: '常に手前に表示', type: 'checkbox', checked: cfg.alwaysOnTop, click: () => toggle('alwaysOnTop') },
